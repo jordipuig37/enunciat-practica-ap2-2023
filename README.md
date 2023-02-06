@@ -18,7 +18,7 @@ Els paquets van arribant en moments del temps a alguna de les estacions. Quan en
 
 Per tal de guanyar tants diners com sigui possible, el director del centre de distribució us ha contractat per tal que dissenyeu i implementeu estratègies per gestionar-lo. Heu de decidir doncs on moure el vagó i quins paquets carregar i entregar, i quan fer-ho. La vostra estratègia serà provada tot simulant-la amb unes dades d'entrada públiques i privades. Les privades tindran unes característiques semblants a les públiques.
 
-De fet, cal que implementeu dues estratègies: la primera s'anomena *L'estratègia de les dues piles* i hauria de funcionar (essencialment) igual per tothom. La segona és la vostra pròpia estratègia i l'hauríeu de fer millor que les de la competència!
+De fet, cal que implementeu dues estratègies: la primera l'anomenem *L'estratègia simple* i hauria de funcionar (essencialment) igual per tothom. La segona és la vostra pròpia estratègia i l'hauríeu de fer millor que les de la competència!
 
 
 ## L'estratègia simple
