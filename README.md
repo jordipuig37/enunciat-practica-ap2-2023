@@ -5,20 +5,18 @@
 
 ## Introducció
 
-Ens trobem en un centre de distribució de paquets. Els paquets tenen pesos i valors diferents. El centre de distribució té un cert nombre d'estacions, connectades amb un sistema de víes en disposició cíclica. Els paquets poden arribar a qualsevol de les estacions, i cal transportar-los a altre estació adient. Disposes d'un vagó que transita les vies i es mou entre estacions, amb la capacitat de carregar i descarregar paquets, limitat per un pes màxim que suporta. El vagó només pot accedir als paquets en ordre d'arribada a la estació.
+Ens trobem en un centre de distribució de paquets. Els paquets tenen pesos i valors diferents. El centre de distribució té un cert nombre d'estacions, connectades amb un sistema de víes en disposició cíclica. Els paquets poden arribar a qualsevol de les estacions, i cal transportar-los a altre estació adient. Disposes d'un vagó que transita les vies i es mou entre estacions, amb la capacitat de carregar i descarregar paquets, limitat per un pes màxim que suporta.
 
-A la figura següent tenim la representació d'un centre de distrubució de 8 estacions:
+A la figura següent tenim la representació d'un centre de distribució de 8 estacions:
 
 ![FCenter](graphics/fullfilment-center.png)
 
-Una grua és capaç de posar, treure i moure contenidors al magatzem. Quan arribi un contenidor nou, la grua el pot agafar i deixar en alguna posició del magatzem, sempre que aquesta sigui legal. Quan calgui treure un contenidor del magatzem, la grua el pot alçar i retirar, a condició que aquest contenidor no tingui cap contenidor damunt seu. La grua també pot moure contenidors dins del magatzem: aixecant-lo primer i deixant-lo després en un altre lloc. Cada acció de la grua (posar, treure o moure) triga exactament una unitat de temps (per exemple, un minut).
+El vagó es capaç de moure's entre estacions, de agafar paquets per transportar-los (sempre que la suma de paquets carregats no superi la capacitat) i de entregar els paquets en les estacions de destinació adients.
+El vagó només pot accedir als paquets en ordre d'arribada a la estació a l'hora de agafar-los d'una estació. El vagó triga un cert temps en carregar un paquet, en entregar-lo i altre cert temps en moure's entre estacions.
 
-Els contenidors arriben seqüencialment a les portes del magatzem. Des del moment que arriba un contenidor fins que arriba el següent, la grua pot anar fent accions, inclosa la d'afegir el contenidor al magatzem. Quan un nou contenidor arriba, els anteriors ja no es poden afegir mai més.
+Els paquets van arribant en moments del temps a alguna de les estacions. Quan entreguem un paquet un cert paquet en la estació destinació, obtenim un benefici que ve indicat en el paquet.
 
-Cada contenidor té doncs un temps d'arribada a l'entrada del magatzem (per exemple, les 10:30) i s'hi estarà fins que sigui emmagatzemat o que arribi el proper contenidor (per exemple, a les 11:35). A més, cada contenidor també té un període de lliurament (per exemple, entre les 12:05 i les 13:00) i
-un valor econòmic associat. Aquest valor només serà guanyat pel magatzem si aquest contenidor és emmagatzemat i extret dins del seu intèrval de lliurament. Sempre es poden treure contenidors del magatzem (i aquests no es poden tornar a agafar mai més), però només els que surtin dins de l'interval de lliurament comportaran un benefici.
-
-Per tal de guanyar tants diners com sigui possible, el director del magatzem us ha contractat per tal que dissenyeu i implementeu estratègies per gestionar el magatzem. Heu de decidir doncs quins contenidors entrar o no al magatzem i quan fer-ho, quins contenidors treure del magatzem i quan fer-ho, i com anar reorganitzant els contenidors dins del magatzem. La vostra estratègia serà provada tot simulant-la amb unes dades d'entrada públiques i privades. Les privades tindran unes característiques semblants a les públiques.
+Per tal de guanyar tants diners com sigui possible, el director del centre de distribució us ha contractat per tal que dissenyeu i implementeu estratègies per gestionar-lo. Heu de decidir doncs on moure el vagó i quins paquets carregar i entregar, i quan fer-ho. La vostra estratègia serà provada tot simulant-la amb unes dades d'entrada públiques i privades. Les privades tindran unes característiques semblants a les públiques.
 
 De fet, cal que implementeu dues estratègies: la primera s'anomena *L'estratègia de les dues piles* i hauria de funcionar (essencialment) igual per tothom. La segona és la vostra pròpia estratègia i l'hauríeu de fer millor que les de la competència!
 
@@ -26,33 +24,12 @@ De fet, cal que implementeu dues estratègies: la primera s'anomena *L'estratèg
 ## L'estratègia simple
 
 Aquesta estratègia es basa en moure'ns sempre en una direcció i passant una per una per totes les estacions cíclicament, deixant els paquets tan aviat com poguem i agafant tots els que suporti el vagó.
-TODO Aquest seria l'aspecte d'un magatzem que segueix aquesta estratègia:
-
-![simple](graphics/simple.png)
 
 TODO L'estratègia funciona de la forma següent:
 
-1. Quan arriba un contenidor nou, aquest és dipositat immediatament a la primera pila de la seva mida.
+1. TODO (Cal explicar-ho més que adalt?)
 
-2. A continuació, per a cada mida de contenidor (és a dir, de 1 a 4)
-
-    1. Tots els contenidors de la primera pila d'aquella mida són transferits (de dalt a baixa) a la segona pila d'aquella mida.
-
-    2. Tots els contenidors de la segona pila d'aquella mida són transferits (de dalt a baixa) a la primera pila d'aquella mida.
-
-        Atenció:
-
-    - Si durant aquests dos passos anteriors es troba algun contenidor caducat, aquest és extret del magatzem.
-
-    - Igualment, si es troba algun contenidor que pot augmentar el benefici en aquell moment, aquest també és extret del magatzem (tot augmentant els diners guanyats).
-
-    - Si el temps assignat s'esgota, cal deixar de tractar contenidors.
-
-    - Si no es pot fer cap acció, es perd aquella unitat de temps.
-
-3. Si encara queda temps, es torna al pas 2.
-
-TODO Podeu veure una execució d'aquesta estratègia a [YouTube](https://youtu.be/kdNeYi99qjo).
+TODO (Com es visualitza?) Podeu veure una execució d'aquesta estratègia a [YouTube](https://youtu.be/kdNeYi99qjo).
 
 
 ## L'estratègia experta
