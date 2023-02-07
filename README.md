@@ -124,6 +124,7 @@ La clase `Station` representa estacions i implementa la seva lógica.
 ```python3
 class Station:
     packages: deque[Package]
+    
     ...
 ```
 
@@ -151,6 +152,8 @@ La clase `FullfilmentCenter` representa el centr de distribució i implementa la
 
 ```python3
 class FullfilmentCenter:
+    ...
+
     def __init__(self, num_stations: int, wagon_capacity: int): ...
     def cash(self) -> int: ...
     def num_stations(self) -> int: ...
