@@ -94,12 +94,12 @@ El tipus `Identifier` representa la identificació única a un paquet. És equiv
 
 ### Direction
 
-L'enumeració `Direction` representa direccions pel vagó. Només pot pendre els valors LEFT (-1) i RIGHT (+1).
+L'enumeració `Direction` representa direccions pel vagó. Només pot pendre els valors LEFT 1 i -1.
 
 ```python3
 class Direction(Enum):
+    RIGHT = 1
     LEFT = -1
-    RIGHT = +1
 ```
 
 ### Package
