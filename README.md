@@ -100,9 +100,6 @@ L'enumeració `Direction` representa direccions pel vagó. Només pot pendre els
 class Direction(Enum):
     LEFT = -1
     RIGHT = +1
-    
-    def __int__(self):
-        return self.value
 ```
 
 ### Package
