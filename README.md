@@ -29,7 +29,7 @@ TODO L'estratègia funciona de la forma següent:
 
 1. TODO (Cal explicar-ho més que adalt?)
 
-TODO (Com es visualitza?) Podeu veure una execució d'aquesta estratègia a [YouTube](https://youtu.be/kdNeYi99qjo).
+Podeu veure una execució d'aquesta estratègia a [YouTube](https://youtu.be/8UbUOdsOHd8).
 
 
 ## L'estratègia experta
@@ -124,7 +124,7 @@ La clase `Station` representa estacions i implementa la seva lógica.
 ```python3
 class Station:
     packages: deque[Package]
-    
+
     ...
 ```
 
