@@ -12,7 +12,7 @@ A la figura següent tenim la representació d'un centre de distribució de 8 es
 ![FCenter](graphics/fullfilment-center.png)
 
 El vagó es capaç de moure's entre estacions, de agafar paquets per transportar-los (sempre que la suma de paquets carregats no superi la capacitat) i de entregar els paquets en les estacions de destinació adients.
-El vagó només pot accedir als paquets en ordre d'arribada a la estació a l'hora de agafar-los d'una estació. El vagó triga un cert temps en carregar un paquet, en entregar-lo i altre cert temps en moure's entre estacions.
+El vagó només pot accedir als paquets en ordre d'arribada a la estació a l'hora de agafar-los d'una estació. El vagó triga una unitat de temps en carregar un paquet, en entregar-lo o en moure's entre estacions adjacents.
 
 Els paquets van arribant en moments del temps a alguna de les estacions. Quan entreguem un paquet un cert paquet en la estació destinació, obtenim un benefici que ve indicat en el paquet.
 
@@ -66,7 +66,7 @@ El vostre sistema tindrà tres mòduls en Python:
 
 - `expert.py`: Aquest mòdul contindrà el codi relacionat amb la vostra implementació de l'estratègia experta.
 
-Aquesta és el diagrama de mòduls:
+Aquest és el diagrama de mòduls:
 
 ![Diagram](graphics/diagram.png)
 
@@ -91,6 +91,20 @@ El tipus `TimeStamp` representa un moment en el temps. És equivalent a un `int`
 
 El tipus `Identifier` representa la identificació única a un paquet. És equivalent a un `int`.
 
+
+### Direction
+
+L'enumeració `Direction` representa direccions pel vagó. Només pot pendre els valors LEFT (-1) i RIGHT (+1).
+
+```python3
+class Direction(Enum):
+    LEFT = -1
+    RIGHT = +1
+    
+    def __int__(self):
+        return self.value
+```
+
 ### Package
 
 L'estructura `Package` representa paquets. N'emmagatzema el seu identificador, el temps d'arribada, la estació en la que es troba, la estació on ha d'arribar, el seu pes i el valor que ens aporta la seva entrega:
@@ -111,7 +125,9 @@ class Package:
 La clase `Station` representa estacions i implementa la seva lógica.
 
 ```python3
-class Station: ...
+class Station:
+    packages: deque[Package]
+    ...
 ```
 
 ### Wagon
@@ -119,7 +135,17 @@ class Station: ...
 La clase `Wagon` representa el vagó i implementa la seva lógica.
 
 ```python3
-class Wagon: ...
+class Wagon:
+    pos: int
+    packages: dict[Package]
+    num_stations: int
+    capacity: int
+    current_load: int
+
+    def __init__(self, num_stations: int, capacity: int): ...
+    def move(self, direction: int): ...
+    def load_package(self, p: Package): ...
+    def deliver(self, identifier: Identifier) -> int: ...
 ```
 
 ### FullfilmentCenter
@@ -129,18 +155,15 @@ La clase `FullfilmentCenter` representa el centr de distribució i implementa la
 ```python3
 class FullfilmentCenter:
     def __init__(self, num_stations: int, wagon_capacity: int): ...
-    def wait_until(self, time: TimeStamp): ...
-    def add_package(self, p: Package): ...
-    def next_time_wagon_idle(self) -> TimeStamp: ...
-    def wagon_packages(self) -> list[Package]: ...
-    def wagon_location(self) -> int | None: ...
-    def wagon_idle(self) -> bool: ...
-    def wagon_deliver(self, identifier: Identifier): ...
-    def move_wagon(self, direction: int): ...
+    def cash(self) -> int: ...
+    def num_stations(self) -> int: ...
+    def wagon(self) -> Wagon: ...
+    def station(self, idx: int) -> Station: ...
+    def recieve_package(self, p: Package): ...
+    def deliver_package(self, identifier: Identifier): ...
     def available_package(self) -> Package | None: ...
     def load_available_package(self): ...
-    def cash(self) -> int: ...
-    def time(self) -> TimeStamp: ...
+    def write(self, stdscr: curses.window, caption: str = ''): ... # ja implementat
 ```
 
 El significat de cada mètode hauria de ser prou clar pel seu nom i paràmetres, però és necessari que el feu explícit amb una especificació completa usant *docstrings*. Tots els mètodes haurien de llançar una excepció si s'executen amb paràmetres invàlids. Deixeu-ho també especificat.
@@ -155,7 +178,7 @@ TODO El mètode `write` ja se us dóna implementat usant la resta d'operacions p
 La funció `read_packages` ja se us dóna implementada i retorna la llista de contenidors continguts en el fitxer que se li passa com a paràmetre:
 
 ```python3
-def read_packages(path: str) -> List[Package]:
+def read_packages(path: str) -> list[Package]:
 ```
 
 El format d'aquest fitxer és senzill: a cada línia es dóna la descripció d'un contenidor amb els seus atributs: identificador, temps d'arribada, estació on arriba inicialment, estació on ha d'arribar, pes i valor.
@@ -163,10 +186,10 @@ El format d'aquest fitxer és senzill: a cada línia es dóna la descripció d'u
 Aquest és un exemple de fitxer de paquets:
 
 ```
-517126 6 6 7 6226 5974
-249865 21 1 6 9838 11339
-724491 27 6 1 2254 1760
-918040 37 9 2 8604 9609
+242178 3 7 5 87 48
+397826 5 4 3 154 164
+352283 6 4 7 6 6
+845856 10 5 4 381 492
 ```
 
 Tots els identificadors són diferents. Fixeu-vos que els paquets venen ordenats per temps d'arribada.
@@ -182,27 +205,27 @@ Fixeu-vos que l'`FullfilmentCenter` no en sap res del `Logger`, són les estrat�
 Els fitxers de registre són senzills: cada acció es desa en una línia amb la marca de temps en què s'ha realitzat. És convenient també desar-hi el benefici obtingut després de cada extracció de contenidor a temps. Aquest és un exemple de fitxer de registre:
 
 ```
-0 START MyStrategy 20 100000
+0 START MyStrategy 8 8000
 0 MOVE 1
-6 ADD 517126
-10 MOVE 1
-20 MOVE 1
-21 ADD 249865
-27 ADD 724491
-30 MOVE 1
-37 ADD 918040
-40 MOVE 1
-45 ADD 951835
-50 LOAD 951835
+1 MOVE 1
+2 MOVE 1
+3 ADD 242178
+3 MOVE 1
+4 MOVE 1
+5 ADD 397826
+5 MOVE 1
+6 ADD 352283
+6 MOVE 1
+7 LOAD 242178
 ```
 
 ### check_and_show
 
 La funció `check_and_show` serveix per comprobar (en certa mesura) que un fitxer de registre és correcte.
-TODO A més, també serveix per visualitzar l'evolució del magatzem al terminal. Ja se us dóna implementada utilitzant les operacions públiques de `FullfilmentCenter`.
+A més, també serveix per visualitzar l'evolució del centre de distribució al terminal. Ja se us dóna implementada utilitzant les operacions públiques de `FullfilmentCenter`.
 
 ```python3
-def check_and_show(packages_path: str, log_path: str): ...
+def check_and_show(packages_path: str, log_path: str, stdscr: curses.window | None = None):
 ```
 
 ## El mòdul `simple.py`
