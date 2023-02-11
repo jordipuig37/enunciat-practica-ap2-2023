@@ -28,7 +28,7 @@ Aquesta estratègia es basa en moure sempre el vagó en la mateixa direcció, to
 
 Podeu veure una execució d'aquesta estratègia a [YouTube](https://youtu.be/8UbUOdsOHd8).
 
-La simulació acaba quan arriba el darrer paquet. Per tant, és possible que no tots els paquets es puguin lliurar.
+La simulació acaba quan arriba el darrer paquet. Per tant, és possible que no tots els paquets es puguin lliurar (de fet l'últim mai s'ha d'arribar a entregar en una execució correcta).
 
 
 ## L'estratègia experta
@@ -45,15 +45,15 @@ Aquesta pràctica té dues parts:
 
 1.  A la primera part heu d'escriure un mòdul per gestionar magatzems de  paquets i dues estratègies per entrar-hi i treure'n paquets. La primera estratègia és l'estratègia simple explicada anteriorment. La segona estratègia és la vostra estratègia experta.
 
-    TODO Heu de lliurar la pràctica a través de l'aplicació Eduflow. Per a fer-ho, aneu a https://app.eduflow.com/join/TODO TODO. A continuació, creu un nou compte introduint el vostre nom complet, el vostre correu electrònic oficial (acabat amb `@estudiantat.upc.edu`) i una contrasenya (recordeu-la!). Lliureu en un fitxer ZIP tots els fitxers necessaris però tingueu cura de **NO** identificar-ne cap amb el vostre nom o altre informació personal vostra: el vostre lliurament ha de ser completament anònim.
+    **TODO** Heu de lliurar la pràctica a través de l'aplicació Eduflow. Per a fer-ho, aneu a https://app.eduflow.com/join/TODO TODO. A continuació, creu un nou compte introduint el vostre nom complet, el vostre correu electrònic oficial (acabat amb `@estudiantat.upc.edu`) i una contrasenya (recordeu-la!). Lliureu en un fitxer ZIP tots els fitxers necessaris però tingueu cura de **NO** identificar-ne cap amb el vostre nom o altre informació personal vostra: el vostre lliurament ha de ser completament anònim.
 
-    TODO La data límit per lliurar la primera part de la vostra pràctica és el dimarts 18 d'abril de 2022 fins a les 23:59.
+    **TODO** La data límit per lliurar la primera part de la vostra pràctica és el dimarts 18 d'abril de 2022 fins a les 23:59.
 
 2.  A la segona part de la pràctica haureu de corregir tres pràctiques d'altres companys. Aquesta correcció es farà també a través de Eduflow i implicarà valorar diferents rúbriques que només veureu en aquest punt.
 
     L'avaluació també serà anònima. El sistema calcularà automàticament la nota de cada estudiant i també avisarà als professors de possibles incoherències. Els abusos seran penalitzats. Cada estudiant té el dret de rebutjar la nota rebuda pels seus companys i pot demanar l'avaluació per part d'un professor (qui podrà puntuar a l'alta o a la baixa respecte l'avaluació dels estudiants). Els professors també poden corregir pràctiques "d'ofici" i substituir la nota rebuda pels companys per la del professor.
 
-    TODO Podeu començar a corregir les pràctiques dels vostres companys a partir del dimecres 19 d'abril a les 8:00. La data límit per lliurar la segona part de la vostra pràctica és el dimarts 29 d'abril a les 23:59. No podreu veure les correccions dels vostres companys fins que no hagueu donat les vostres correccions.
+    **TODO** Podeu començar a corregir les pràctiques dels vostres companys a partir del dimecres 19 d'abril a les 8:00. La data límit per lliurar la segona part de la vostra pràctica és el dimarts 29 d'abril a les 23:59. No podreu veure les correccions dels vostres companys fins que no hagueu donat les vostres correccions.
 
 Totes les pràctiques s'han de fer en solitari. Els professors utilitzaran programes detectors de plagi. És obligatori corregir les pràctiques dels tres companys assignades pel sistema.
 
@@ -103,8 +103,6 @@ class Direction(Enum):
     LEFT = -1
 ```
 
-> Em sembla bé però no ho coneixen. Ho deixem així?
-
 ### Package
 
 L'estructura `Package` representa paquets. N'emmagatzema el seu identificador, el temps d'arribada, l'estació en la que es troba, l'estació on ha d'arribar, el seu pes i el valor que ens aporta la seva entrega:
@@ -114,15 +112,15 @@ L'estructura `Package` representa paquets. N'emmagatzema el seu identificador, e
 class Package:
     identifier: Identifier
     arrival: TimeStamp
-    location: int
+    source: int
     destination: int
     weight: int
     value: int
 ```
 
-> Suposo que caldria dir que cap paquet arriba a la mateixa estació a la qual està destinat. Però, es poden descarregar paquets en l'estació on no estàn destinats? Si es pot, què passa? Es posen a la cua?
-
-> La `location` què és? L'estació d'orígen? Potser llavors en podríem dir `source`. Perquè si no, quan el paquet és al vagó, què val?
+- `source` ens indica a quina estació ha arribat el paquet.
+- `destination` ens indica a quina estació hem d'entregar el paquet.
+- `source` sempre serà diferent a `destination`.
 
 ### Station
 
@@ -142,22 +140,17 @@ La clase `Wagon` representa el vagó i implementa la seva lógica.
 ```python3
 class Wagon:
     pos: int
-    packages: dict[Package]   # ??? list? o dict[Identifier, Package]?
-    num_stations: int         # ??? aquí? és per fer "la volta"?
+    packages: dict[Identifier, Package]
+    num_stations: int
     capacity: int
-    current_load: int         # aquest el podríem amagar...
+    current_load: int
 
     def __init__(self, num_stations: int, capacity: int) -> None: ...
     def move(self, direction: Direction) -> None: ...
-    def load_package(self, p: Package) -> None: ...
-    def deliver(self, identifier: Identifier) -> int: ...
+    ...
 ```
 
-> Ens cal requirir aquests mètodes? No els haurien de posar ells? Les dades sí que ens calen pel dibuix.
-
 ### FullfilmentCenter
-
-> DistributionCenter?
 
 La clase `FullfilmentCenter` representa el centre de distribució i implementa la seva lógica. Els centres de distribució es creen amb un cert nombre d'estacions i un cert pes màxim pel vagó, i ha d'implementar les següents funcions:
 
@@ -170,18 +163,14 @@ class FullfilmentCenter:
     def num_stations(self) -> int: ...
     def wagon(self) -> Wagon: ...
     def station(self, idx: int) -> Station: ...
-    def recieve_package(self, p: Package) -> None: ...
+    def receive_package(self, p: Package) -> None: ...
     def deliver_package(self, identifier: Identifier) -> None: ...
-    def available_package(self) -> Package | None: ...
-    def load_available_package(self): ...
+    def current_station_package(self) -> Package | None: ...
+    def load_current_station_package(self) -> None: ...
     def write(self, stdscr: curses.window, caption: str = ''): ... # ja implementat
 ```
 
-> recieve_package spelling
-
 El significat de cada mètode hauria de ser prou clar pel seu nom i paràmetres, però és necessari que el feu explícit amb una especificació completa usant *docstrings*. Tots els mètodes haurien de llançar una excepció si s'executen amb paràmetres invàlids. Deixeu-ho també especificat.
-
-> Doncs jo no he sabut entendre què els el available_package i el load_available_package.
 
 Quan implementeu la classe `FullfilmentCenter`, suposeu que el nombre d'estacions i el pes màxim del vagó poden ser molt grans. Això afectarà la tria de les estructures de dades subjacents.
 
@@ -226,15 +215,14 @@ Els fitxers de registre són senzills: cada acció es desa en una línia amb la 
 2 MOVE 1
 3 ADD 242178
 3 MOVE 1
-4 MOVE 1
+4 ADD 867456
+4 LOAD 242178
 5 ADD 397826
+5 ADD 983875
 5 MOVE 1
-6 ADD 352283
-6 MOVE 1
-7 LOAD 242178
+6 DELIVER 242178
+7 LOAD 397826
 ```
-
-> Estaria bé posar un exemple on es veu que dos paquets arribe al mateix instant o dir per algun lloc que no pot passar.
 
 ### check_and_show
 
@@ -242,7 +230,7 @@ La funció `check_and_show` serveix per comprobar (en certa mesura) que un fitxe
 A més, també serveix per visualitzar l'evolució del centre de distribució al terminal. Ja se us dóna implementada utilitzant les operacions públiques de `FullfilmentCenter`.
 
 ```python3
-def check_and_show(packages_path: str, log_path: str, stdscr: curses.window | None = None):
+def check_and_show(packages_path: str, log_path: str, stdscr: curses.window | None = None) -> None:
 ```
 
 ## El mòdul `simple.py`
@@ -258,17 +246,15 @@ class Strategy:
         log_path: str
     ): ...
     def cash(self) -> int: ...
-    def exec(self, packages: list[Package]): ...
+    def exec(self, packages: list[Package]) -> None: ...
 ```
 
-Cada estratègia es crea amb una amplada del magatzem i un nom de fitxer on es registraran les accions que l'estretègia aplica al magatzem.
+Cada estratègia es crea amb un nombre de estacions, una capacitat pel vagó i un nom de fitxer on es registraran les accions que l'estretègia aplica al centre de distribució.
 
-El mètode `exec` és el cervell de l'estratègia i s'executa cada cop que arriba un nou paquet. Llavors, aquest `exec` pot realitzar tantes accions de la grua com hi hagi dins de l'intèrval de temps de l'arribada del paquet.
+El mètode `exec` és el cervell de l'estratègia i s'executa un únic cop, i ha de dur a terme les accions de la estratègia.
 
-> ??? Això està bé?
-
-El mòdul `simple.py` també ofereix una funció `main` que serveix per executar el programa. Podeu veure que simplement executa l'estratègia usant tres paràmetres donats a la línia de comandes: nom del fitxer de paquets, nom del fitxer de registre i amplada del magatzem. Podeu comentar/descomentar la línia del `check_and_show` per habilitar o deshabilitar la comprovació i visualització. El `main` és essencialment un capa per damunt de
-la funció `execute_strategy(packages_path: str, log_path: str, num_stations: int, wagon_capacity: int)` que s'encarrega de llegir els paquets i anar cridant a `exec`.
+El mòdul `simple.py` també ofereix una funció `main` que serveix per executar el programa. Podeu veure que simplement executa l'estratègia usant dos paràmetres donats a la línia de comandes: nom del fitxer de paquets i nom del fitxer de registre. Podeu comentar/descomentar la línia del `check_and_show` per habilitar o deshabilitar la comprovació i visualització. El `main` és essencialment un capa per damunt de
+la funció `execute_strategy(packages_path: str, log_path: str, num_stations: int, wagon_capacity: int)` que s'encarrega de llegir els paquets i cridar a `exec`.
 
 El `main` també inclou unes instruccions necessàries per inicialitzar la llibreria `curses`, que s'encarrega de preparar les coloraines i posicionament dels textos al terminal. Podeu ignorar-ne els detalls.
 
