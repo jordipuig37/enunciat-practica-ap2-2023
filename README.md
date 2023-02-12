@@ -266,8 +266,11 @@ El mòdul `expert.py` és exactament igual que el `simple.py`, tret que ha d'imp
 
 ## Jocs de proves
 
-TODO Al directori [tests](tests) teniu els jocs de proves públics (llistes de paquets). Ara mateix només n'hi ha un ([simple.txt](tests/simple.txt)) amb 100 paquets, però aviat en posarem un de més llarg, semblant al privat que es publicarà després del lliurament.
-
+Al directori [tests](tests) teniu els jocs de proves públics (llistes de paquets). Teniu 3 arxius: [simple.txt](tests/simple.txt), [test-1.txt](tests/test-1.txt) i [test-2.txt](tests/test-2.txt); amb 100, 5000 i 10000 paquets respectivament.
+Necessitareu els següents paràmetres per cada test:
+- [simple.txt](tests/simple.txt): `num_stations = 8, wagon_capacity = 8_000`
+- [test-1.txt](tests/test-1.txt): `num_stations = 8, wagon_capacity = 8_000`
+- [test-2.txt](tests/test-2.txt): `num_stations = 32, wagon_capacity = 32_000`
 
 ## Consells
 
