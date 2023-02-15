@@ -5,7 +5,7 @@
 
 ## Introducció
 
-Ens trobem en un centre de distribució de paquets. Els paquets tenen pesos i valors diferents. El centre de distribució té un cert nombre d'estacions, connectades amb un sistema de vies en disposició cíclica. Els paquets poden arribar a qualsevol de les estacions, i cal transportar-los a una altra estació adient. Disposem d'un vagó que transita sobre les vies movent-se entre estacions, amb la capacitat de carregar i descarregar paquets, limitat per un pes màxim dels paquets que transporta.
+Ens trobem en un centre de distribució de paquets. Els paquets tenen pesos i valors diferents. El centre de distribució té un cert nombre d'estacions, connectades amb un sistema de vies en disposició circular. Els paquets poden arribar a qualsevol de les estacions, i cal transportar-los a una altra estació adient. Disposem d'un vagó que transita sobre les vies movent-se entre estacions, amb la capacitat de carregar i descarregar paquets, limitat per un pes màxim dels paquets que transporta.
 
 A la figura següent tenim la representació d'un centre de distribució amb vuit estacions:
 
@@ -13,13 +13,13 @@ A la figura següent tenim la representació d'un centre de distribució amb vui
 
 Al principi, el vagó es troba buit i davant de la primera estació, i les estacions no tenen cap paquet.
 
-El vagó es capaç de moure's entre estacions, de recollir paquets per (sempre que la suma dels pesos dels paquets carregats no superi la seva capacitat) i de lliurar els paquets en les estacions de destinació adients. El vagó només pot accedir als paquets en ordre d'arribada a l'estació a l'hora de recollir-los d'aquella estació. El vagó triga una unitat de temps en carregar un paquet, una unitat de temps en lliurar-lo i una unitat de temps en moure's entre estacions adjacents.
+El vagó es capaç de moure's entre estacions, de recollir paquets en estacions(sempre que la suma dels pesos dels paquets carregats no superi la seva capacitat) i de lliurar els paquets en les estacions de destinació adients. El vagó només pot accedir als paquets en ordre d'arribada a l'estació a l'hora de recollir-los d'aquella estació. El vagó triga una unitat de temps en carregar un paquet, una unitat de temps en lliurar-lo i una unitat de temps en moure's entre estacions adjacents.
 
 Els paquets van arribant en instants de temps a alguna de les estacions. Quan un paquet es lliura a la seva estació de destí, obtenim un benefici que ve indicat en el paquet.
 
-Per tal de guanyar tants diners com sigui possible, el director del centre de distribució us ha contractat per tal que dissenyeu i implementeu estratègies per gestionar el moviment del vagó. Heu de decidir doncs mon moure el vagó i quins paquets recollir i lliurar, i quan fer-ho. La vostra estratègia serà provada tot simulant-la amb unes dades d'entrada públiques i privades. Les privades tindran unes característiques semblants a les públiques.
+Per tal de maximitzar el benefici, el director del centre de distribució us ha contractat per tal que dissenyeu i implementeu estratègies per gestionar el moviment del vagó. Heu de decidir doncs com moure el vagó i quins paquets recollir i lliurar, i quan fer-ho. La vostra estratègia serà provada tot simulant-la amb unes dades d'entrada públiques i privades. Les privades tindran unes característiques semblants a les públiques.
 
-De fet, cal que implementeu dues estratègies: la primera l'anomenem *L'estratègia simple* i hauria de funcionar (essencialment) igual per tothom. La segona és la vostra pròpia estratègia i l'hauríeu de fer millor que les de la competència!
+Més concretament, cal que implementeu dues estratègies: la primera l'anomenem *L'estratègia simple* i hauria de funcionar (essencialment) igual per tothom. La segona és la vostra pròpia estratègia i l'hauríeu de fer millor que les de la competència!
 
 
 ## L'estratègia simple
@@ -33,7 +33,7 @@ La simulació acaba quan arriba el darrer paquet. Per tant, és possible que no 
 
 ## L'estratègia experta
 
-L'estratègia experta és una estratègia que vosaltres heu de dissenyar. Ha de ser original vostra i ha de maximitzar el benefici obtingut amb un joc de proves que coneixereu després del lliurament.
+L'estratègia experta és una estratègia que vosaltres heu de dissenyar. Ha de ser original vostra i ha de provar de maximitzar el benefici obtingut amb un joc de proves que coneixereu després del lliurament.
 
 La simulació també acaba quan arriba el darrer paquet.
 
@@ -45,15 +45,15 @@ Aquesta pràctica té dues parts:
 
 1.  A la primera part heu d'escriure un mòdul per gestionar magatzems de  paquets i dues estratègies per entrar-hi i treure'n paquets. La primera estratègia és l'estratègia simple explicada anteriorment. La segona estratègia és la vostra estratègia experta.
 
-    **TODO** Heu de lliurar la pràctica a través de l'aplicació Eduflow. Per a fer-ho, aneu a https://app.eduflow.com/join/TODO TODO. A continuació, creu un nou compte introduint el vostre nom complet, el vostre correu electrònic oficial (acabat amb `@estudiantat.upc.edu`) i una contrasenya (recordeu-la!). Lliureu en un fitxer ZIP tots els fitxers necessaris però tingueu cura de **NO** identificar-ne cap amb el vostre nom o altre informació personal vostra: el vostre lliurament ha de ser completament anònim.
+    Heu de lliurar la pràctica a través de l'aplicació Eduflow. Per a fer-ho, aneu a https://app.eduflow.com/join/TDZKXP. A continuació, creu un nou compte introduint el vostre nom complet, el vostre correu electrònic oficial (acabat amb `@estudiantat.upc.edu`) i una contrasenya (recordeu-la!). Lliureu en un fitxer ZIP tots els fitxers necessaris però tingueu cura de **NO** identificar-ne cap amb el vostre nom o altre informació personal vostra: el vostre lliurament ha de ser completament anònim.
 
-    **TODO** La data límit per lliurar la primera part de la vostra pràctica és el dimarts 18 d'abril de 2022 fins a les 23:59.
+    La data límit per lliurar la primera part de la vostra pràctica és el dilluns 10 d'abril de 2023 fins a les 23:59.
 
 2.  A la segona part de la pràctica haureu de corregir tres pràctiques d'altres companys. Aquesta correcció es farà també a través de Eduflow i implicarà valorar diferents rúbriques que només veureu en aquest punt.
 
     L'avaluació també serà anònima. El sistema calcularà automàticament la nota de cada estudiant i també avisarà als professors de possibles incoherències. Els abusos seran penalitzats. Cada estudiant té el dret de rebutjar la nota rebuda pels seus companys i pot demanar l'avaluació per part d'un professor (qui podrà puntuar a l'alta o a la baixa respecte l'avaluació dels estudiants). Els professors també poden corregir pràctiques "d'ofici" i substituir la nota rebuda pels companys per la del professor.
 
-    **TODO** Podeu començar a corregir les pràctiques dels vostres companys a partir del dimecres 19 d'abril a les 8:00. La data límit per lliurar la segona part de la vostra pràctica és el dimarts 29 d'abril a les 23:59. No podreu veure les correccions dels vostres companys fins que no hagueu donat les vostres correccions.
+    Podeu començar a corregir les pràctiques dels vostres companys a partir del dimecres 12 d'abril a les 8:00. La data límit per lliurar la segona part de la vostra pràctica és el diumenge 30 d'abril a les 23:59. No podreu veure les correccions dels vostres companys fins que no hagueu donat les vostres correccions.
 
 Totes les pràctiques s'han de fer en solitari. Els professors utilitzaran programes detectors de plagi. És obligatori corregir les pràctiques dels tres companys assignades pel sistema.
 
@@ -129,7 +129,6 @@ La clase `Station` representa estacions i implementa la seva lógica.
 ```python3
 class Station:
     packages: deque[Package]
-
     ...
 ```
 
