@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from typing import TextIO
 from collections import deque
 from enum import Enum
-import curses
-import time
 
 
 TimeStamp = int
@@ -72,48 +70,6 @@ class FullfilmentCenter:
 
     def load_current_station_package(self) -> None: ...
 
-    def write(self, stdscr: curses.window, caption: str = '') -> None:
-        def package_color(p: Package) -> int:
-            return curses.color_pair(1 + p.destination * 6 * 764351 % 250)
-
-        factory_height = 8  # maximum number of rows to write
-        wagon_height = 6 # maximum number of rows to write
-        delay = 0.15  # delay after writing the state
-        # start: clear screen
-        stdscr.clear()
-        # write caption
-        stdscr.addstr(0, 0, caption)
-        stdscr.addstr(1, 0, ' ' * caption.find('t:') + '$: ' + str(self.cash()))
-        # write stations base
-        for i in range(self.num_stations()):
-            stdscr.addstr(factory_height + 3, 3*i, '-') 
-            stdscr.addstr(factory_height + 3, 3*i + 1, f's{i}', package_color(Package(-1, -1, -1, i, -1, -1)))
-        stdscr.addstr(factory_height + 3, 3*self.num_stations(), '-') 
-        # write packages in stations
-        for i in range(self.num_stations()):
-            x, dy = 3*i + 1, 0
-            for p in self.station(i).packages:
-                dy += 1
-                if dy > factory_height:
-                    stdscr.addstr(factory_height + 3 - factory_height - 1, x, f'..')
-                else:
-                    stdscr.addstr(factory_height + 3 - dy, x, f'{p.identifier%100:02d}', package_color(p))
-        # write wagon
-        for i in range(wagon_height):
-            stdscr.addstr(factory_height + 4 + wagon_height-1-i, 3*self.wagon().pos, '|')
-            stdscr.addstr(factory_height + 4 + wagon_height-1-i, 3*self.wagon().pos + 3, '|')
-        # write wagon packages
-        ps = list(self.wagon().packages.values())
-        for i in range(min(len(ps), wagon_height-1)):
-            p = ps[i]
-            stdscr.addstr(factory_height + 4 + wagon_height-1-i, 3*self.wagon().pos + 1, f'{p.identifier%100:02d}', package_color(p))
-        if len(ps) >= wagon_height:
-            stdscr.addstr(factory_height + 4, 3*self.wagon().pos + 1, '..')
-        stdscr.addstr(factory_height + 4 + wagon_height, 3*self.wagon().pos, f'o--o')
-        # done
-        stdscr.refresh()
-        time.sleep(delay)
-
 
 class Logger:
     """Class to log fcenter actions to a file."""
@@ -149,7 +105,7 @@ def read_packages(path: str) -> list[Package]:
         return packages
 
 
-def check_and_show(packages_path: str, log_path: str, stdscr: curses.window | None = None) -> None:
+def check_and_show(packages_path: str, log_path: str) -> None:
     """
     Check that the actions stored in the log at log_path with the packages at packages_path are legal.
     Raise an exception if not.
@@ -211,6 +167,3 @@ def check_and_show(packages_path: str, log_path: str, stdscr: curses.window | No
             last_wagon_action = t
         else:
             assert False
-
-        if stdscr:
-            fcenter.write(stdscr, f'{name} t: {line.strip()}')
